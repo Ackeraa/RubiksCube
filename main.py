@@ -1,5 +1,6 @@
 from manim import *
-from manim_rubikscube import *
+from rubiks_cube import RubiksCube
+from cube import Cube
 
 class Main(ThreeDScene):
     def construct(self):
@@ -17,22 +18,26 @@ class Main(ThreeDScene):
         cube.set_state(state)
         self.play(FadeIn(cube))
         self.wait()
+        self.play(CubeMove(cube, "R"), run_time=1.5)
 
+        '''
         for m in cube.solve_by_kociemba(state):
             self.play(CubeMove(cube, m), run_time=1)
 
         self.play(Rotating(cube, radians=2*PI, run_time=2))
 
-        '''
         self.begin_ambient_camera_rotation(rate=0.5)
         self.wait(3)
         '''
 
-class Test(Scene):
+class Test(ThreeDScene):
     def construct(self):
-        square = Square()
-        square.set_fill(RED, opacity=1)
-        square.set(stroke_color=BLACK, corner_radius=1.5)
-        self.add(square)
+        cube = Cube((1, 2, 3))
+        cube = RubiksCube()
+
+        self.move_camera(phi=60*DEGREES, theta=160*DEGREES)
+        #self.renderer.camera.frame_center = cube.get_center()
+        self.add(cube)
         self.wait()
+
 
