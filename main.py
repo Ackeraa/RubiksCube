@@ -1,6 +1,7 @@
 from manim import *
 from rubiks_cube import RubiksCube
 from cube import Cube
+from manim.opengl import *
 
 class Main(ThreeDScene):
     def construct(self):
@@ -54,25 +55,42 @@ class Test2(ThreeDScene):
     def construct(self):
 
         cube = Cube((1,2,3))
-        cube.set(fill_color=BLUE, stroke_color=BLACK, fill_opacity=1)
-        cube.set_fill(BLUE, 1.0)
         cube1 = cube.copy().next_to(cube, UP, buff=0)
         self.move_camera(phi=60*DEGREES, theta=-30*DEGREES)
         self.renderer.camera.frame_center = cube.get_center()
+        self.begin_ambient_camera_rotation()
         axes = ThreeDAxes()
         self.add(cube)
-        self.bring_to_back(cube[4])
         self.play(FadeIn(cube))
         self.interactive_embed()
 
-class Test3(ThreeDScene):
+class Test3(Scene):
     def construct(self):
-        self.move_3d_camera(phi=60*DEGREES, theta=-30*DEGREES)
+
+        from manim.mobject.opengl.opengl_geometry import  OpenGLSquare
+
+        '''
+        self.move_camera(phi=60*DEGREES, theta=-30*DEGREES)
         self.begin_ambient_camera_rotation()
-        face = Square(stroke_color=RED, fill_color=BLUE, fill_opacity=1, shade_in_3d=True)
+        '''
+        face = OpenGLSquare(stroke_color=RED, fill_color=BLUE, fill_opacity=1)
         face.apply_matrix(z_to_vector(RIGHT))
+        face.apply_depth_test()
         face1 = face.copy().scale(0.5).move_to(LEFT)
-        self.bring_to_back(face1)
+        face1.apply_depth_test()
+        face1.set_fill(GREEN, opacity=1)
         self.add(face, face1)
         self.interactive_embed()
 
+class Test4(ThreeDScene):
+    def construct(self):
+        from manim.mobject.opengl.opengl_surface import  OpenGLSurface
+        s = OpenGLSurface(depth_test=True)
+        s.set(stroke_color=GREEN)
+        s.apply_matrix(z_to_vector(RIGHT))
+        s1 = OpenGLSurface(color=RED, depth_test=True).shift(IN).scale(0.5)
+        s1.apply_matrix(z_to_vector(RIGHT))
+        vg = OpenGLMobject()
+        vg.add(s1, s)
+        self.add(vg)
+        self.interactive_embed()

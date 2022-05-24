@@ -1,0 +1,10 @@
+directories:
+  temporary_storage: "D:\\tmp"
+style:
+  background_color: "#000000"
+camera_resolutions:
+  default_resolution: "4k"
+camera_quality:
+  default_quality: "ultra_high"
+full_screen: False
+

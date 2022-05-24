@@ -1,12 +1,7 @@
-import numpy as np
+from manimlib import *
 
-class A:
-    def __init__(self):
-        self._items = [[[0 for _ in range(2)] for _ in range(2)] for _ in range(2)]
-
-    def __getitem__(self, x, y):
-        print(x, y)
-
-
-a = A()
-a[0][1]
+class Main(Scene):
+    def construct(self):
+        face = Square(stroke_color=RED, fill_color=BLUE, fill_opacity=1)
+        self.add(face)
+        self.wait()
