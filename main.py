@@ -1,6 +1,7 @@
 from manim import *
 from rubiks_cube import RubiksCube
 from cube import Cube
+from face_rotate import FaceRotate
 
 class Main(ThreeDScene):
     def construct(self):
@@ -18,7 +19,7 @@ class Main(ThreeDScene):
         cube.set_state(state)
         self.play(FadeIn(cube))
         self.wait()
-        self.play(CubeMove(cube, "R"), run_time=1.5)
+        #self.play(CubeMove(cube, "R"), run_time=1.5)
 
         '''
         for m in cube.solve_by_kociemba(state):
@@ -35,27 +36,36 @@ class Test(ThreeDScene):
     def construct(self):
         cube = RubiksCube()
 
-        self.move_camera(phi=60*DEGREES, theta=-30*DEGREES)
+        self.move_camera(phi=60*DEGREES, theta=205*DEGREES)
         self.renderer.camera.frame_center = cube.get_center()
         axes = ThreeDAxes()
         self.add(cube)
         self.add(axes)
+        '''
         vg2 = VGroup(*cube[:, 2, :].flatten())
         vg1 = VGroup(*cube[:, 0, :].flatten())
         vg = VGroup(*cube[:, 1, :].flatten())
         self.bring_to_back(vg2)
         self.bring_to_back(vg)
-        '''
         face = Square(1, fill_color=RED, fill_opacity=1)
         face.flip()
         face.shift(1 * OUT / 2.0)
         face.apply_matrix(z_to_vector(RIGHT))
         face.shift(RIGHT + IN)
+        self.play(FaceRotate(cube, "L"))
+        self.play(FaceRotate(cube, "F"))
         '''
+        self.play(cube.rotate("L"))
+        self.play(cube.rotate("R"))
+        self.play(cube.rotate("F"))
+        self.play(cube.rotate("B"))
+        self.play(cube.rotate("D"))
+        self.play(cube.rotate("U"))
+
         # [-1.  0.  0.] [ 0.  0. -1.] [0. 1. 0.]
         # RIGHT, UP, OUT ---> X, Y, Z
         #cube[2, 1, 0][3].set(shade_in_3d=False)
-        self.play(Rotating(vg, radians=PI/2, axis=UP, about_point=cube[1][1][1].get_center()), run_time=0.5)
+        #self.play(Rotating(vg, radians=PI/2, axis=UP, about_point=cube[1][1][1].get_center()), run_time=0.5)
         self.wait()
 
 class Test2(ThreeDScene):

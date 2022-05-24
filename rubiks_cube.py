@@ -10,6 +10,9 @@ class RubiksCube(VGroup):
         self.dim = dim
         self.cube_side_length = cube_side_length
         self.cubies = np.ndarray((dim, dim, dim), dtype=Cube)
+        sli = slice(None, None, None)
+        self.faces = {"F": (0, sli, sli), "B": (dim - 1, sli, sli), "U": (sli, sli, dim - 1),
+                      "D": (sli, sli, 0), "L": (sli, dim - 1, sli), "R": (sli, 0, sli)}
         
         super().__init__(fill_color=BLUE, fill_opacity=1, stroke_color=BLACK, stroke_width=4)
 
@@ -30,6 +33,30 @@ class RubiksCube(VGroup):
             x_vg.add(y_vg)
         x_vg.arrange(RIGHT, buff=0)
 
-    def __getitem__(self, key):
-        return self.cubies[key]
+    def rotate(self, which):
+        rot = 1 if which[0] in ["R", "F", "D"] else -1
+        rot = rot * 2 if "2" in which else rot 
+        rot = -rot if "'" in which else rot 
+        np_rot = -rot if which[0] in ["L", "R"] else rot
+        axis = self.get_axis(which[0])
 
+        face = self.get_face(which[0])
+        face.set_z_index(-1)
+
+        self.cubies[self.faces[which]] = np.rot90(self.cubies[self.faces[which]], k=np_rot)
+
+        return Rotate(face, angle=rot*PI/2, axis=axis)
+
+    def get_axis(self, which):
+        if which == "F" or which == "B":
+            return X_AXIS
+        elif which == "U" or which == "D":
+            return Z_AXIS
+        else:
+            return Y_AXIS
+
+    def get_face(self, which):
+        return VGroup(*self.cubies[self.faces[which]].flatten())
+
+    def __getitem__(self, key):
+        return VGroup(*self.cubies[self.faces[key]].flatten())
