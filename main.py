@@ -1,7 +1,6 @@
 from manim import *
 from rubiks_cube import RubiksCube
 from cube import Cube
-from manim.opengl import *
 
 class Main(ThreeDScene):
     def construct(self):
@@ -36,20 +35,28 @@ class Test(ThreeDScene):
     def construct(self):
         cube = RubiksCube()
 
-        self.move_camera(phi=60*DEGREES, theta=30*DEGREES)
+        self.move_camera(phi=60*DEGREES, theta=-30*DEGREES)
         self.renderer.camera.frame_center = cube.get_center()
         axes = ThreeDAxes()
         self.add(cube)
         self.add(axes)
-        vg = VGroup(*cube[:, 2, :].flatten())
+        vg2 = VGroup(*cube[:, 2, :].flatten())
         vg1 = VGroup(*cube[:, 0, :].flatten())
-        vg2 = VGroup(*cube[:, 1, :].flatten())
+        vg = VGroup(*cube[:, 1, :].flatten())
         self.bring_to_back(vg2)
         self.bring_to_back(vg)
-        self.play(Rotating(vg, radians=PI/2, axis=UP, about_point=cube[1][2][1].get_center()))
-
-        self.interactive_embed()
-
+        '''
+        face = Square(1, fill_color=RED, fill_opacity=1)
+        face.flip()
+        face.shift(1 * OUT / 2.0)
+        face.apply_matrix(z_to_vector(RIGHT))
+        face.shift(RIGHT + IN)
+        '''
+        # [-1.  0.  0.] [ 0.  0. -1.] [0. 1. 0.]
+        # RIGHT, UP, OUT ---> X, Y, Z
+        #cube[2, 1, 0][3].set(shade_in_3d=False)
+        self.play(Rotating(vg, radians=PI/2, axis=UP, about_point=cube[1][1][1].get_center()), run_time=0.5)
+        self.wait()
 
 class Test2(ThreeDScene):
     def construct(self):

@@ -12,7 +12,6 @@ class RubiksCube(VGroup):
         self.cubies = np.ndarray((dim, dim, dim), dtype=Cube)
         
         super().__init__(fill_color=BLUE, fill_opacity=1, stroke_color=BLACK, stroke_width=4)
-        self.generate_points()
 
     def generate_points(self):
         x_vg = VGroup()
