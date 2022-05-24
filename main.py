@@ -73,12 +73,12 @@ class Test3(Scene):
         self.move_camera(phi=60*DEGREES, theta=-30*DEGREES)
         self.begin_ambient_camera_rotation()
         '''
-        face = OpenGLSquare(stroke_color=RED, fill_color=BLUE, fill_opacity=1)
+        face = OpenGLSquare(fill_color=BLUE, fill_opacity=1)
         face.apply_matrix(z_to_vector(RIGHT))
         face.apply_depth_test()
         face1 = face.copy().scale(0.5).move_to(LEFT)
-        face1.apply_depth_test()
         face1.set_fill(GREEN, opacity=1)
+        face1.apply_depth_test()
         self.add(face, face1)
         self.interactive_embed()
 
