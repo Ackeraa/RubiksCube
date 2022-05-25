@@ -16,7 +16,7 @@ class Cube(VGroup):
     def generate_points(self):
         for _, vect in sorted(self.faces_map.values(), key=lambda value:value[0]):    # -> F, B, R, L, U, D
             face = RoundedRectangle(height=self.side_length, width=self.side_length, stroke_color=BLACK, stroke_width=4,
-                    corner_radius=self.corner_radius, shade_in_3d=True, fill_color=BLACK, fill_opacity=1)
+                    corner_radius=self.corner_radius, shade_in_3d=True, fill_color=BLACK, fill_opacity=1, sheen_factor=1)
             face.flip()
             face.shift(self.side_length * OUT / 2.0)
             face.apply_matrix(z_to_vector(vect))
@@ -37,6 +37,7 @@ class RubiksCube(VGroup):
         self.cube_side_length = cube_side_length
         self.colors =  colors
         self.cubies = np.ndarray((dim, dim, dim), dtype=Cube)
+        self.fixed_face = []
         sli = slice(None, None, None)
         self.faces_map = { "F": (0, sli, sli), "B": (dim - 1, sli, sli), "U": (sli, sli, dim - 1),
                            "D": (sli, sli, 0), "L": (sli, dim - 1, sli), "R": (sli, 0, sli) }
@@ -71,12 +72,15 @@ class RubiksCube(VGroup):
         rot = rot * 2 if "2" in which else rot 
         rot = -rot if "'" in which else rot 
         np_rot = -rot if which[0] in ["L", "R"] else rot
-        axis = self.rotate_axis(which[0])
+        axis = self.rotate_axis[which[0]]
 
         face = self.get_face(which[0])
+        VGroup(*self.cubies.flatten()).set_z_index(0)
         face.set_z_index(-1)
 
         self.cubies[self.faces_map[which]] = np.rot90(self.cubies[self.faces_map[which]], k=np_rot)
+
+        #self.fix_render_bug(which[0])
 
         return Rotate(face, angle=rot*PI/2, axis=axis)
 
@@ -86,3 +90,27 @@ class RubiksCube(VGroup):
 
     def get_face(self, which):
         return VGroup(*self.cubies[self.faces_map[which]].flatten())
+
+    def fix_render_bug(self, which):
+        # recover 
+        for face in self.fixed_face:
+            face.set(shade_in_3d=True)
+
+        self.fixed_face = []
+        if which == "R":
+            face = self.cubies[:, 1, :]
+            cubes = face[:, self.dim - 1]
+            for edge in cubes:
+                edge.get_face("U").set(shade_in_3d=False)
+                self.fixed_face.append(edge.get_face("U"))
+            cubes = face[0, :]
+            for edge in cubes:
+                edge.get_face("F").set(shade_in_3d=False)
+                self.fixed_face.append(edge.get_face("F"))
+        elif which == "L":
+            face = self.cubies[:, self.dim - 1, :]
+            cubes = face[0, :]
+            for edge in cubes:
+                edge.get_face("U").set(shade_in_3d=False)
+                self.fixed_face.append(edge.get_face("U"))
+
