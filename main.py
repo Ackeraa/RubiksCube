@@ -55,12 +55,8 @@ class Test(ThreeDScene):
         self.play(FaceRotate(cube, "L"))
         self.play(FaceRotate(cube, "F"))
         '''
-        self.play(cube.rotate("L"))
-        self.play(cube.rotate("R"))
-        self.play(cube.rotate("F"))
-        self.play(cube.rotate("B"))
-        self.play(cube.rotate("D"))
-        self.play(cube.rotate("U"))
+        #cube.set_state()
+        #self.play(cube.rotate("L"))
 
         # [-1.  0.  0.] [ 0.  0. -1.] [0. 1. 0.]
         # RIGHT, UP, OUT ---> X, Y, Z
