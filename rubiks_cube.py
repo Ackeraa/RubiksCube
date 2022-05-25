@@ -5,7 +5,7 @@ COLORS = {"U": WHITE, "R": "#B90000", "F": "#009B48",
           "D": "#FFD500", "L": "#FF5900", "B": "#0045AD"}
 
 class Cube(VGroup):
-    def __init__(self, side_length=2, corner_radius=0.2):
+    def __init__(self, side_length=2, corner_radius=0.1):
         self.side_length = side_length
         self.corner_radius = corner_radius
         self.faces_map = { "F": (0, LEFT), "B": (1, RIGHT), "R": (2, DOWN), 
@@ -21,6 +21,9 @@ class Cube(VGroup):
             face.shift(self.side_length * OUT / 2.0)
             face.apply_matrix(z_to_vector(vect))
             self.add(face)
+
+    def set_color(self, which, color):
+        self.get_face(which).set_fill(color)
 
     def get_face(self, which):
         return self[self.faces_map[which][0]]
@@ -76,6 +79,10 @@ class RubiksCube(VGroup):
         self.cubies[self.faces_map[which]] = np.rot90(self.cubies[self.faces_map[which]], k=np_rot)
 
         return Rotate(face, angle=rot*PI/2, axis=axis)
+
+    def set_color(self, pos, color):
+        cube = self.get_face(pos[0])[pos[1]*self.dim+pos[2]]
+        cube.set_color(pos[0], color)
 
     def get_face(self, which):
         return VGroup(*self.cubies[self.faces_map[which]].flatten())
