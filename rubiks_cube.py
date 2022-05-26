@@ -1,33 +1,47 @@
 from manim import *
 import numpy as np
 import random
+from kociemba import solver as sv
 
 COLORS = {"U": WHITE, "R": "#B90000", "F": "#009B48",
           "D": "#FFD500", "L": "#FF5900", "B": "#0045AD"}
+
+class Face(RoundedRectangle):
+    def __init__(self, side_length, corner_radius, which):
+        super().__init__(height=side_length, width=side_length, stroke_color=BLACK, stroke_width=4,
+                shade_in_3d=True, corner_radius=corner_radius, fill_color=BLACK, fill_opacity=1)
+        self.which = which
 
 class Cube(VGroup):
     def __init__(self, side_length=2, corner_radius=0.1):
         self.side_length = side_length
         self.corner_radius = corner_radius
-        self.faces_map = { "F": (0, LEFT), "B": (1, RIGHT), "R": (2, DOWN), 
-                           "L": (3, UP), "U": (4, OUT), "D": (5, IN) }
+        self.face_map = { "F": (0, 1, 1), "B": (2, 1, 1), "R": (1, 0, 1), 
+                           "L": (1, 2, 1), "U": (1, 1, 2), "D": (1, 1, 0) }
+        sli = slice(None, None, None)
+        self.faces_map = { "F": (1, sli, sli), "B": (1, sli, sli), "U": (sli, sli, 1),
+                           "D": (sli, sli, 1), "L": (sli, 1, sli), "R": (sli, 1, sli) }
+        self.faces = np.ndarray((3, 3, 3), dtype=object)
 
         super().__init__(fill_color=BLACK, fill_opacity=1, stroke_color=BLACK, stroke_width=4)
 
     def generate_points(self):
-        for _, vect in sorted(self.faces_map.values(), key=lambda value:value[0]):    # -> F, B, R, L, U, D
-            face = RoundedRectangle(height=self.side_length, width=self.side_length, stroke_color=BLACK, stroke_width=4,
-                    corner_radius=self.corner_radius, shade_in_3d=True, fill_color=BLACK, fill_opacity=1, sheen_factor=1)
+        for which, vect in ("F", LEFT), ("B", RIGHT), ("R", DOWN), ("L", UP), ("U", OUT), ("D", IN):
+            face = Face(self.side_length, self.corner_radius, which)
             face.flip()
             face.shift(self.side_length * OUT / 2.0)
             face.apply_matrix(z_to_vector(vect))
             self.add(face)
+            self.faces[self.face_map[which]] = face
 
     def set_color(self, which, color):
         self.get_face(which).set_fill(color)
 
     def get_face(self, which):
-        return self[self.faces_map[which][0]]
+        return self.faces[self.face_map[which]]
+
+    def rotate(self, which, rot):
+        self.faces[self.faces_map[which]] = np.rot90(self.faces[self.faces_map[which]], k=rot)
 
 class RubiksCube(VGroup):
     
@@ -40,7 +54,7 @@ class RubiksCube(VGroup):
         self.cubies = np.ndarray((dim, dim, dim), dtype=Cube)
         self.fixed_face = []
         sli = slice(None, None, None)
-        self.faces_map = { "F": (0, sli, sli), "B": (dim - 1, sli, sli), "U": (sli, sli, dim - 1),
+        self.face_map = { "F": (0, sli, sli), "B": (dim - 1, sli, sli), "U": (sli, sli, dim - 1),
                            "D": (sli, sli, 0), "L": (sli, dim - 1, sli), "R": (sli, 0, sli) }
         self.rotate_axis = { "F": X_AXIS, "B": X_AXIS, "L": Y_AXIS,
                              "R": Y_AXIS, "U": Z_AXIS, "D": Z_AXIS }
@@ -64,7 +78,7 @@ class RubiksCube(VGroup):
             x_vg.add(y_vg)
         x_vg.arrange(RIGHT, buff=0)
 
-        for which in self.faces_map.keys():
+        for which in self.face_map.keys():
             for cube in self.get_face(which):
                 cube.get_face(which).set(fill_color=self.colors[which])
 
@@ -72,8 +86,12 @@ class RubiksCube(VGroup):
         cube = self.get_face(pos[0])[pos[1]*self.dim+pos[2]]
         cube.set_color(pos[0], color)
 
-    def get_face(self, which):
-        return VGroup(*self.cubies[self.faces_map[which]].flatten())
+    def get_face(self, which, flatten=True):
+        face = self.cubies[self.face_map[which]]
+        if flatten:
+            return VGroup(*face.flatten())
+        else:
+            return face
 
     def rotate(self, which, show=True):
         rot = 1 if which[0] in ["R", "F", "D"] else -1
@@ -86,16 +104,19 @@ class RubiksCube(VGroup):
         VGroup(*self.cubies.flatten()).set_z_index(0)
         face.set_z_index(-1)
 
-        self.cubies[self.faces_map[which[0]]] = np.rot90(self.cubies[self.faces_map[which[0]]], k=np_rot)
+        # rotate face of each cube
+        for cube in face:
+            cube.rotate(which[0], np_rot)
+        # rotate face of rubiks_cube
+        self.cubies[self.face_map[which[0]]] = np.rot90(self.cubies[self.face_map[which[0]]], k=np_rot)
 
-        #self.fix_render_bug(which[0])
         if show:
             return Rotate(face, angle=rot*PI/2, axis=axis)
         else:
             face.rotate(angle=rot*PI/2, axis=axis)
 
     def disarray(self, moves=20, show=False):
-        whichs = [i + j for i in self.faces_map.keys() for j in ["", "2", "'"]]
+        whichs = [i + j for i in self.face_map.keys() for j in ["", "2", "'"]]
 
         def show_disarray():
             for _ in range(moves):
@@ -112,4 +133,30 @@ class RubiksCube(VGroup):
             return show_disarray()
         else:
             hide_disarray()
+            return self
 
+    def solve(self):
+        # get state
+        # UUUUUUUUURRRRRRRRRFFFFFFFFFDDDDDDDDDLLLLLLLLLBBBBBBBBB
+        state = ""
+        for cube in np.rot90(self.get_face("U", False), 2).flatten():
+            state += cube.get_face("U").which
+
+        for cube in np.rot90(np.flip(self.get_face("R", False), (0, 1)), -1).flatten():
+            state += cube.get_face("R").which
+
+        for cube in np.rot90(np.flip(self.get_face("F", False), 0)).flatten():
+            state += cube.get_face("F").which
+
+        for cube in np.rot90(np.flip(self.get_face("D", False), 0), 2).flatten():
+            state += cube.get_face("D").which
+
+        for cube in np.rot90(np.flip(self.get_face("L", False), 0)).flatten():
+            state += cube.get_face("L").which
+
+        for cube in np.rot90(np.flip(self.get_face("B", False), (0, 1)), -1).flatten():
+            state += cube.get_face("B").which
+
+        rotations = sv.solve(state).replace("3", "'").replace("1", "").split()
+        for rotation in rotations:
+            yield self.rotate(rotation)
