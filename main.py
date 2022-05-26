@@ -9,11 +9,13 @@ class Main(ThreeDScene):
         rubiks_cube = RubiksCube(dim=3)
         self.set_camera_orientation(phi=60*DEGREES, theta=160*DEGREES)
 
-        #self.add(rubiks_cube)
+        self.add(rubiks_cube)
+        for rotation in rubiks_cube.disarray(show=True, moves=2):
+            self.play(rotation)
         
         #self.play(rubiks_cube.rotate("R"), run_time=0.3)
         vg = VGroup(*rubiks_cube.cubies.flatten())
-        self.play(SpiralIn(vg), run_time=2)
+        #self.play(SpiralIn(vg), run_time=2)
 
         '''
         self.play(rubiks_cube.rotate("R"), run_time=0.3)

@@ -1,5 +1,6 @@
 from manim import *
 import numpy as np
+import random
 
 COLORS = {"U": WHITE, "R": "#B90000", "F": "#009B48",
           "D": "#FFD500", "L": "#FF5900", "B": "#0045AD"}
@@ -67,7 +68,14 @@ class RubiksCube(VGroup):
             for cube in self.get_face(which):
                 cube.get_face(which).set(fill_color=self.colors[which])
 
-    def rotate(self, which):
+    def set_color(self, pos, color):
+        cube = self.get_face(pos[0])[pos[1]*self.dim+pos[2]]
+        cube.set_color(pos[0], color)
+
+    def get_face(self, which):
+        return VGroup(*self.cubies[self.faces_map[which]].flatten())
+
+    def rotate(self, which, show=True):
         rot = 1 if which[0] in ["R", "F", "D"] else -1
         rot = rot * 2 if "2" in which else rot 
         rot = -rot if "'" in which else rot 
@@ -78,39 +86,30 @@ class RubiksCube(VGroup):
         VGroup(*self.cubies.flatten()).set_z_index(0)
         face.set_z_index(-1)
 
-        self.cubies[self.faces_map[which]] = np.rot90(self.cubies[self.faces_map[which]], k=np_rot)
+        self.cubies[self.faces_map[which[0]]] = np.rot90(self.cubies[self.faces_map[which[0]]], k=np_rot)
 
         #self.fix_render_bug(which[0])
+        if show:
+            return Rotate(face, angle=rot*PI/2, axis=axis)
+        else:
+            face.rotate(angle=rot*PI/2, axis=axis)
 
-        return Rotate(face, angle=rot*PI/2, axis=axis)
+    def disarray(self, moves=20, show=False):
+        whichs = [i + j for i in self.faces_map.keys() for j in ["", "2", "'"]]
 
-    def set_color(self, pos, color):
-        cube = self.get_face(pos[0])[pos[1]*self.dim+pos[2]]
-        cube.set_color(pos[0], color)
+        def show_disarray():
+            for _ in range(moves):
+                which = random.choice(whichs)
+                rotate = self.rotate(which, show=show)
+                yield rotate
 
-    def get_face(self, which):
-        return VGroup(*self.cubies[self.faces_map[which]].flatten())
+        def hide_disarray():
+            for _ in range(moves):
+                which = random.choice(whichs)
+                self.rotate(which, show=show)
 
-    def fix_render_bug(self, which):
-        # recover 
-        for face in self.fixed_face:
-            face.set(shade_in_3d=True)
-
-        self.fixed_face = []
-        if which == "R":
-            face = self.cubies[:, 1, :]
-            cubes = face[:, self.dim - 1]
-            for edge in cubes:
-                edge.get_face("U").set(shade_in_3d=False)
-                self.fixed_face.append(edge.get_face("U"))
-            cubes = face[0, :]
-            for edge in cubes:
-                edge.get_face("F").set(shade_in_3d=False)
-                self.fixed_face.append(edge.get_face("F"))
-        elif which == "L":
-            face = self.cubies[:, self.dim - 1, :]
-            cubes = face[0, :]
-            for edge in cubes:
-                edge.get_face("U").set(shade_in_3d=False)
-                self.fixed_face.append(edge.get_face("U"))
+        if show:
+            return show_disarray()
+        else:
+            hide_disarray()
 
