@@ -40,7 +40,7 @@ class Cube(VGroup):
     def get_face(self, which):
         return self.faces[self.face_map[which]]
 
-    def rotate(self, which, rot):
+    def turn(self, which, rot):
         self.faces[self.faces_map[which]] = np.rot90(self.faces[self.faces_map[which]], k=rot)
 
 class RubiksCube(VGroup):
@@ -56,7 +56,7 @@ class RubiksCube(VGroup):
         sli = slice(None, None, None)
         self.face_map = { "F": (0, sli, sli), "B": (dim - 1, sli, sli), "U": (sli, sli, dim - 1),
                            "D": (sli, sli, 0), "L": (sli, dim - 1, sli), "R": (sli, 0, sli) }
-        self.rotate_axis = { "F": X_AXIS, "B": X_AXIS, "L": Y_AXIS,
+        self.turn_axis = { "F": X_AXIS, "B": X_AXIS, "L": Y_AXIS,
                              "R": Y_AXIS, "U": Z_AXIS, "D": Z_AXIS }
         
         self.generate_cubies()
@@ -83,8 +83,7 @@ class RubiksCube(VGroup):
                 cube.get_face(which).set(fill_color=self.colors[which])
 
     def set_color(self, pos, color):
-        cube = self.get_face(pos[0])[pos[1]*self.dim+pos[2]]
-        cube.set_color(pos[0], color)
+        self.cubies[pos[1], pos[2], pos[3]].set_color(pos[0], color)
 
     def get_face(self, which, flatten=True):
         face = self.cubies[self.face_map[which]]
@@ -93,21 +92,21 @@ class RubiksCube(VGroup):
         else:
             return face
 
-    def rotate(self, which, show=True):
+    def turn(self, which, show=True):
         rot = 1 if which[0] in ["R", "F", "D"] else -1
         rot = rot * 2 if "2" in which else rot 
         rot = -rot if "'" in which else rot 
         np_rot = -rot if which[0] in ["L", "R"] else rot
-        axis = self.rotate_axis[which[0]]
+        axis = self.turn_axis[which[0]]
 
         face = self.get_face(which[0])
         VGroup(*self.cubies.flatten()).set_z_index(0)
         face.set_z_index(-1)
 
-        # rotate face of each cube
+        # turn face of each cube
         for cube in face:
-            cube.rotate(which[0], np_rot)
-        # rotate face of rubiks_cube
+            cube.turn(which[0], np_rot)
+        # turn face of rubiks_cube
         self.cubies[self.face_map[which[0]]] = np.rot90(self.cubies[self.face_map[which[0]]], k=np_rot)
 
         if show:
@@ -121,13 +120,13 @@ class RubiksCube(VGroup):
         def show_disarray():
             for _ in range(moves):
                 which = random.choice(whichs)
-                rotate = self.rotate(which, show=show)
-                yield rotate
+                turn = self.turn(which, show=show)
+                yield turn
 
         def hide_disarray():
             for _ in range(moves):
                 which = random.choice(whichs)
-                self.rotate(which, show=show)
+                self.turn(which, show=show)
 
         if show:
             return show_disarray()
@@ -157,6 +156,6 @@ class RubiksCube(VGroup):
         for cube in np.rot90(np.flip(self.get_face("B", False), (0, 1)), -1).flatten():
             state += cube.get_face("B").which
 
-        rotations = sv.solve(state).replace("3", "'").replace("1", "").split()
-        for rotation in rotations:
-            yield self.rotate(rotation)
+        turns = sv.solve(state).replace("3", "'").replace("1", "").split()
+        for turn in turns:
+            yield self.turn(turn)
