@@ -114,18 +114,19 @@ class RubiksCube(VGroup):
         else:
             face.rotate(angle=rot*PI/2, axis=axis)
 
-    def disarray(self, moves=20, show=False):
+    def disarray(self, moves=20, show=False, seed=None):
+        rand = random.Random(seed)
         whichs = [i + j for i in self.face_map.keys() for j in ["", "2", "'"]]
 
         def show_disarray():
             for _ in range(moves):
-                which = random.choice(whichs)
+                which = rand.choice(whichs)
                 turn = self.turn(which, show=show)
                 yield turn
 
         def hide_disarray():
             for _ in range(moves):
-                which = random.choice(whichs)
+                which = rand.choice(whichs)
                 self.turn(which, show=show)
 
         if show:
