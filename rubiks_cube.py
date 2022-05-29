@@ -34,7 +34,7 @@ class Cube(VGroup):
             self.add(face)
             self.faces[self.face_map[which]] = face
 
-    def set_color(self, which, color):
+    def setcolor(self, which, color):
         self.get_face(which).set_fill(color)
 
     def get_face(self, which):
@@ -82,8 +82,8 @@ class RubiksCube(VGroup):
             for cube in self.get_face(which):
                 cube.get_face(which).set(fill_color=self.colors[which])
 
-    def set_color(self, pos, color):
-        self.cubies[pos[1], pos[2], pos[3]].set_color(pos[0], color)
+    def setcolor(self, pos, color):
+        self.cubies[pos[1], pos[2], pos[3]].setcolor(pos[0], color)
 
     def get_face(self, which, flatten=True):
         face = self.cubies[self.face_map[which]]
