@@ -6,10 +6,8 @@ COLORS = {"U": WHITE, "R": "#B90000", "F": "#009B48",
           "D": "#FFD500", "L": "#FF5900", "B": "#0045AD"}
 class Main(ThreeDScene):
     def construct(self):
-        self.set_camera_orientation(phi=60*DEGREES, theta=160*DEGREES)
-        self.gray_colors = { face : GRAY for face in ["F", "B", "U", "D", "L", "R"] }
         self.begin()
-        #self.kociemba()
+        self.kociemba()
         #self.step1()
         #self.step2()
         #self.step3()
@@ -17,10 +15,12 @@ class Main(ThreeDScene):
         #self.step5()
         #self.step6()
         #self.step7()
-        self.cfop()
-        self.end()
+        #self.cfop()
+        #self.end()
     
     def begin(self):
+        self.gray_colors = { face : GRAY for face in ["F", "B", "U", "D", "L", "R"] }
+        self.set_camera_orientation(phi=55*DEGREES, theta=240*DEGREES)
         self.cube0 = RubiksCube(dim=3)
         self.begin_ambient_camera_rotation(rate=-2)
         self.play(SpiralIn(VGroup(*self.cube0.cubies[:, :, :].flatten())), run_time=2)
@@ -32,10 +32,25 @@ class Main(ThreeDScene):
         self.cube.disarray()
         self.play(ReplacementTransform(self.cube0, self.cube))
         self.wait()
+
+        t = Text("kociemba 算法", font_size=24, color=BLACK)
+        t.to_corner(UL)
+        self.add_fixed_in_frame_mobjects(t)
+        self.play(t.animate.set(color=WHITE))
+
         for rotate in self.cube.solve():
-            self.play(rotate, run_time=0.4)
+            pass
+            #self.play(rotate, run_time=0.4)
+
+        anims = [FadeOut(self.cube), FadeOut(t)]
+        self.move_camera(phi=55*DEGREES, theta=(240+180)*DEGREES, zoom=0, added_anims=anims, run_time=4)
 
     def step1(self):
+        t = Text("CFOP 算法", font_size=24, color=BLACK)
+        t.to_corner(UL)
+        self.add_fixed_in_frame_mobjects(t)
+        self.play(t.animate.set(color=WHITE))
+
         self.set_camera_orientation(phi=55*DEGREES, theta=210*DEGREES)
         axes = ThreeDAxes()
         self.add(axes)
@@ -373,14 +388,11 @@ class Test(ThreeDScene):
     def construct(self):
         axes = ThreeDAxes()
         cube = RubiksCube()
-        self.add(axes, cube)
+        self.add(cube)
         self.set_camera_orientation(phi=55*DEGREES, theta=210*DEGREES)
-        self.play(Rotate(cube, angle=PI/2, axis=Y_AXIS))
-        for turn in ["U", "L", "D", "R", "F"]:
-            self.play(cube.turn(turn))
-        '''
-        self.move_camera(phi=(55+0)*DEGREES, theta=(210-30)*DEGREES)
-        self.move_camera(phi=(55-90)*DEGREES, theta=(210-30)*DEGREES)
-        self.move_camera(phi=(55-90)*DEGREES, theta=(210-30-30)*DEGREES)
-        '''
+        t = Text("kociemba 算法", font_size=24, color=BLACK)
+        t.to_corner(UL)
+        self.add_fixed_in_frame_mobjects(t)
+        self.play(t.animate.set(color=WHITE))
+        self.remove(cube)
         self.wait()
