@@ -58,6 +58,7 @@ class Test2(ThreeDScene):
         cube.set_fill(BLUE, 1.0)
         cube1 = cube.copy().next_to(cube, UP, buff=0)
         self.move_camera(phi=60*DEGREES, theta=-30*DEGREES)
+        self.begin_ambient_camera_rotation()
         self.renderer.camera.frame_center = cube.get_center()
         axes = ThreeDAxes()
         self.add(cube)
