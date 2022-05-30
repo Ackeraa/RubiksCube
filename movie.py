@@ -84,7 +84,7 @@ class Main(ThreeDScene):
         cube3.setcolor(("D", 0, 1, 0), COLORS["F"])
 
         vg = VGroup(cube3, cube1, cube2).arrange(UP+0.5*LEFT, buff=3)
-        self.play(FadeIn(vg, t.animate.set(color=RED_E)))
+        self.play(FadeIn(vg), t.animate.set(color=RED_E))
         self.play(cube1.animate.scale(2).move_to(ORIGIN))
 
         # case 1
@@ -165,7 +165,7 @@ class Main(ThreeDScene):
         c3 = cube3.get_center()
         c4 = cube4.get_center()
 
-        self.play(FadeIn(vg, t.animate.set(color=RED_E)))
+        self.play(FadeIn(vg), t.animate.set(color=RED_E))
 
         self.play(cube1.animate.scale(2.5).move_to(ORIGIN))
         # case 1
