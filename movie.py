@@ -20,7 +20,7 @@ class Main(ThreeDScene):
         self.cfop()
     
     def begin(self):
-        self.add("bgm.mp3")
+        self.add_sound("bgm.mp3")
         self.set_camera_orientation(phi=55*DEGREES, theta=240*DEGREES)
         self.cube0 = RubiksCube(dim=3)
         self.begin_ambient_camera_rotation(rate=-2)
@@ -556,7 +556,7 @@ class Main(ThreeDScene):
         for _ in range(4):
             for turn in ["L'", "U'", "L", "U"]:
                 self.play(cube.turn(turn), run_time=0.5)
-        self.play(cube.turn("D'"), run_time=054)
+        self.play(cube.turn("D'"), run_time=0.5)
 
         self.move_camera(phi=-120*DEGREES, theta=(-30+180)*DEGREES, run_time=4)
 
