@@ -3,8 +3,8 @@ import numpy as np
 import random
 from kociemba import solver as sv
 
-COLORS = {"U": WHITE, "R": "#B90000", "F": "#009B48",
-          "D": "#FFD500", "L": "#FF5900", "B": "#0045AD"}
+COLORS = {"U": WHITE, "R": "#B90000", "F": "#1DDF13",
+          "D": "#FFD500", "L": "#F0720A", "B": "#0045AD"}
 
 class Face(RoundedRectangle):
     def __init__(self, side_length, corner_radius, which):
