@@ -12,8 +12,8 @@ class Main(ThreeDScene):
         self.step1()
         self.step2()
         self.step3()
-        '''
         self.step4()
+        '''
         self.step5()
         self.step6()
         self.step7()
@@ -25,7 +25,7 @@ class Main(ThreeDScene):
         self.set_camera_orientation(phi=55*DEGREES, theta=240*DEGREES)
         self.cube0 = RubiksCube(dim=3)
         self.begin_ambient_camera_rotation(rate=-2)
-        self.play(SpiralIn(VGroup(*self.cube0.cubies[:, :, :].flatten())), run_time=2)
+        self.play(SpiralIn(VGroup(*self.cube0.cubies[:, :, :].flatten())), run_time=2.5)
         self.stop_ambient_camera_rotation()
         self.wait(0.6)
 
@@ -35,7 +35,7 @@ class Main(ThreeDScene):
         self.play(ReplacementTransform(self.cube0, self.cube))
 
         t = Text("kociemba 算法", font_size=24, color=BLACK)
-        t.to_corner(UL)
+        t.to_corner(UL, buff=0).shift(RIGHT*0.3+DOWN*0.2)
         self.add_fixed_in_frame_mobjects(t)
         self.play(t.animate.set(color=WHITE))
         self.wait(0.5)
@@ -44,12 +44,12 @@ class Main(ThreeDScene):
             self.play(rotate, run_time=0.4)
 
         anims = [FadeOut(self.cube), FadeOut(t)]
-        self.move_camera(phi=55*DEGREES, theta=(240+180)*DEGREES, zoom=0, added_anims=anims, run_time=3)
+        self.move_camera(phi=55*DEGREES, theta=(240+180)*DEGREES, zoom=0.2, added_anims=anims, run_time=2)
         self.remove(self.cube, t)
 
     def step1(self):
         t = Text("CFOP 算法(STEP 1)", font_size=24, color=BLACK)
-        t.to_corner(UL)
+        t.to_corner(UL, buff=0).shift(RIGHT*0.3+DOWN*0.2)
         self.add_fixed_in_frame_mobjects(t)
         self.play(t.animate.set(color=WHITE))
 
@@ -113,12 +113,12 @@ class Main(ThreeDScene):
         self.wait(0.5)
         
         anims = [FadeOut(vg), FadeOut(t)]
-        self.move_camera(phi=55*DEGREES, theta=(240+180)*DEGREES, zoom=0, added_anims=anims, run_time=3)
+        self.move_camera(phi=55*DEGREES, theta=(240+180)*DEGREES, zoom=0.2, added_anims=anims, run_time=3)
         self.remove(vg)
 
     def step2(self):
         t = Text("CFOP 算法(STEP 2)", font_size=24, color=BLACK)
-        t.to_corner(UL)
+        t.to_corner(UL, buff=0).shift(RIGHT*0.3+DOWN*0.2)
         self.add_fixed_in_frame_mobjects(t)
         self.play(t.animate.set(color=WHITE))
 
@@ -183,7 +183,7 @@ class Main(ThreeDScene):
             self.play(cube2.turn(turn))
         self.wait(0.5)
 
-        self.play(cube2.animate.scale(0.4).move_to(cube2),
+        self.play(cube2.animate.scale(0.4).move_to(c2),
                   cube3.animate.scale(2).move_to(ORIGIN))
 
         # case 3
@@ -202,12 +202,12 @@ class Main(ThreeDScene):
         self.play(cube4.animate.scale(0.5).move_to(c4))
 
         anims = [FadeOut(vg), FadeOut(t)]
-        self.move_camera(phi=55*DEGREES, theta=(240+180)*DEGREES, zoom=0, added_anims=anims, run_time=3)
+        self.move_camera(phi=55*DEGREES, theta=(240+180)*DEGREES, zoom=0.2, added_anims=anims, run_time=3)
         self.remove(vg)
 
     def step3(self):
         t = Text("CFOP 算法(STEP 3)", font_size=24, color=BLACK)
-        t.to_corner(UL)
+        t.to_corner(UL, buff=0).shift(RIGHT*0.3+DOWN*0.2)
         self.add_fixed_in_frame_mobjects(t)
         self.play(t.animate.set(color=WHITE))
 
@@ -288,12 +288,12 @@ class Main(ThreeDScene):
         self.wait(0.5)
 
         anims = [FadeOut(vg), FadeOut(ts), FadeOut(t)]
-        self.move_camera(phi=55*DEGREES, theta=(240+180)*DEGREES, zoom=0, added_anims=anims, run_time=3)
+        self.move_camera(phi=55*DEGREES, theta=(240+180)*DEGREES, zoom=0.2, added_anims=anims, run_time=3)
         self.remove(vg, ts)
 
     def step4(self):
         t = Text("CFOP 算法(STEP 4)", font_size=24, color=BLACK)
-        t.to_corner(UL)
+        t.to_corner(UL, buff=0).shift(RIGHT*0.3+DOWN*0.2)
         self.add_fixed_in_frame_mobjects(t)
         self.play(t.animate.set(color=WHITE))
         self.set_camera_orientation(phi=55*DEGREES, theta=210*DEGREES, zoom=1)
@@ -373,12 +373,12 @@ class Main(ThreeDScene):
         self.wait(0.5)
 
         anims = [FadeOut(cube1), FadeOut(css), FadeOut(arrs), FadeOut(ts), FadeOut(t)]
-        self.move_camera(phi=55*DEGREES, theta=(240+180)*DEGREES, zoom=0, added_anims=anims, run_time=3)
+        self.move_camera(phi=55*DEGREES, theta=(240+180)*DEGREES, zoom=0.2, added_anims=anims, run_time=3)
         self.remove(cube1, ts, css, arrs)
 
     def step5(self):
         t = Text("CFOP 算法(STEP 5)", font_size=24, color=BLACK)
-        t.to_corner(UL)
+        t.to_corner(UL, buff=0).shift(RIGHT*0.3+DOWN*0.2)
         self.add_fixed_in_frame_mobjects(t)
         self.play(t.animate.set(color=WHITE))
 
@@ -414,12 +414,51 @@ class Main(ThreeDScene):
         for i in range(len(turns)):
             self.play(Indicate(ts[i], color=TEAL), cube1.turn(turns[i]))
         anims = [FadeOut(cube1), FadeOut(ts), FadeOut(t)]
-        self.move_camera(phi=55*DEGREES, theta=(200+180)*DEGREES, zoom=0, added_anims=anims, run_time=3)
+        self.move_camera(phi=55*DEGREES, theta=(200+180)*DEGREES, zoom=0.2, added_anims=anims, run_time=3)
         self.remove(cube1, ts)
 
     def step6(self):
         t = Text("CFOP 算法(STEP 6)", font_size=24, color=BLACK)
-        t.to_corner(UL)
+        t.to_corner(UL, buff=0).shift(RIGHT*0.3+DOWN*0.2)
+        self.add_fixed_in_frame_mobjects(t)
+        self.play(t.animate.set(color=WHITE))
+
+        self.set_camera_orientation(phi=55*DEGREES, theta=160*DEGREES, zoom=1)
+        colors = {"U": COLORS["D"], "D": COLORS["U"], "L": COLORS["L"],
+                  "R": COLORS["R"], "F": COLORS["B"], "B": COLORS["F"]}
+        cube1 = RubiksCube(dim=3, colors=colors)
+        cube1.cubies[0, 0, 2].set_fill(GRAY)
+        cube1.cubies[0, 2, 2].set_fill(GRAY)
+        cube1.cubies[2, 0, 2].set_fill(GRAY)
+        cube1.cubies[2, 2, 2].set_fill(GRAY)
+        cube2 = cube1.copy()
+
+        cube1.setcolor(("F", 0, 1, 2), colors["L"])
+        cube1.setcolor(("L", 1, 2, 2), colors["F"])
+        self.add(cube1)
+
+        d1 = Dot(color=RED).move_to(cube2.cubies[0, 1, 2].get_face("U"))
+        d2 = Dot(color=BLACK).move_to(cube2.cubies[1, 2, 2].get_face("U"))
+        p1 = d1.get_center()
+        p2 = d2.get_center()
+        self.play(FadeIn(d1, d2))
+        self.wait(0.5)
+        self.play(d1.animate.move_to(p2), d2.animate.move_to(p1))
+        self.play(FadeOut(d1, d2))
+
+        self.move_camera(phi=55*DEGREES, theta=(360+200)*DEGREES, run_time=4)
+
+        turns = ["R", "U", "R'", "U", "R", "U2", "R'", "U"]
+        ts = VGroup(*[Text(turn, font_size=20) for turn in turns]).arrange(RIGHT, buff=0.1)
+        self.add_fixed_in_frame_mobjects(ts)
+        ts.shift(UP*3.5)
+        for i in range(len(turns)):
+            self.play(Indicate(ts[i], color=TEAL), cube1.turn(turns[i]))
+        anims = [FadeOut(cube1), FadeOut(ts), FadeOut(t)]
+        self.move_camera(phi=55*DEGREES, theta=(200+180)*DEGREES, zoom=0.2, added_anims=anims, run_time=3)
+        self.remove(cube1, ts)
+
+    
         self.add_fixed_in_frame_mobjects(t)
         self.play(t.animate.set(color=WHITE))
 
@@ -458,12 +497,12 @@ class Main(ThreeDScene):
             self.move_camera(phi=55*DEGREES, theta=(210+360*(i+1))*DEGREES, run_time=4)
 
         anims = [FadeOut(cube1), FadeOut(ts), FadeOut(t)]
-        self.move_camera(phi=55*DEGREES, theta=(200+180)*DEGREES, zoom=0, added_anims=anims, run_time=3)
+        self.move_camera(phi=55*DEGREES, theta=(200+180)*DEGREES, zoom=0.2, added_anims=anims, run_time=3)
         self.remove(cube1, ts)
 
     def step7(self):
         t = Text("CFOP 算法(STEP 7)", font_size=24, color=BLACK)
-        t.to_corner(UL)
+        t.to_corner(UL, buff=0).shift(RIGHT*0.3+DOWN*0.2)
         self.add_fixed_in_frame_mobjects(t)
         self.play(t.animate.set(color=WHITE))
 
@@ -509,12 +548,12 @@ class Main(ThreeDScene):
             self.play(cube1.turn("U"))
 
         anims = [FadeOut(cube1), FadeOut(ts), FadeOut(t)]
-        self.move_camera(phi=55*DEGREES, theta=(210+180)*DEGREES, zoom=0, added_anims=anims, run_time=3)
+        self.move_camera(phi=55*DEGREES, theta=(210+180)*DEGREES, zoom=0.2, added_anims=anims, run_time=3)
         self.remove(cube1, ts)
 
     def cfop(self):
         t = Text("CFOP 算法", font_size=24, color=BLACK)
-        t.to_corner(UL)
+        t.to_corner(UL, buff=0).shift(RIGHT*0.3+DOWN*0.2)
         self.add_fixed_in_frame_mobjects(t)
         self.play(t.animate.set(color=WHITE))
 
@@ -573,7 +612,7 @@ class Main(ThreeDScene):
         self.play(cube.turn("D'"), run_time=0.3)
 
         anims = [FadeOut(cube)]
-        self.move_camera(phi=-120*DEGREES, theta=(-30+180)*DEGREES, zoom=0, added_anims=anims, run_time=3)
+        self.move_camera(phi=-120*DEGREES, theta=(-30+180)*DEGREES, zoom=0.2, added_anims=anims, run_time=3)
         self.remove(cube)
 
     def end(self):
