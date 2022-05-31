@@ -21,7 +21,7 @@ class Main(ThreeDScene):
     
     def begin(self):
         self.add_sound("bgm.mp3")
-        self.set_camera_orientation(phi=55*DEGREES, theta=240*DEGREES)
+        self.set_camera_orientation(should_apply_shading=False, phi=55*DEGREES, theta=240*DEGREES)
         self.cube0 = RubiksCube(dim=3)
         self.begin_ambient_camera_rotation(rate=-2)
         self.play(SpiralIn(VGroup(*self.cube0.cubies[:, :, :].flatten())), run_time=2.5)
@@ -34,7 +34,7 @@ class Main(ThreeDScene):
         self.play(ReplacementTransform(self.cube0, self.cube))
 
         t = Text("kociemba 算法", font_size=22, color=BLACK)
-        t.to_corner(UL, buff=0).shift(RIGHT*0.5+DOWN*0.2)
+        t.to_corner(UL, buff=0).shift(RIGHT*0.5+DOWN*0.4)
         self.add_fixed_in_frame_mobjects(t)
         self.play(t.animate.set(color=WHITE))
         self.wait(0.5)
@@ -48,10 +48,10 @@ class Main(ThreeDScene):
 
     def step1(self):
         t = Text("C F O P 算法: I", font_size=22, color=BLACK)
-        t.to_corner(UL, buff=0).shift(RIGHT*0.5+DOWN*0.2)
+        t.to_corner(UL, buff=0).shift(RIGHT*0.5+DOWN*0.4)
         self.add_fixed_in_frame_mobjects(t)
 
-        self.set_camera_orientation(phi=55*DEGREES, theta=210*DEGREES, zoom=1)
+        self.set_camera_orientation(should_apply_shading=False, phi=55*DEGREES, theta=210*DEGREES, zoom=1)
         cube1 = RubiksCube(dim=3, colors=self.gray_colors).scale(0.5)
 
         cube1.setcolor(("U", 1, 0, 2), COLORS["U"])
@@ -116,10 +116,10 @@ class Main(ThreeDScene):
 
     def step2(self):
         t = Text("C F O P 算法: II", font_size=22, color=BLACK)
-        t.to_corner(UL, buff=0).shift(RIGHT*0.5+DOWN*0.2)
+        t.to_corner(UL, buff=0).shift(RIGHT*0.5+DOWN*0.4)
         self.add_fixed_in_frame_mobjects(t)
 
-        self.set_camera_orientation(phi=55*DEGREES, theta=210*DEGREES, zoom=1)
+        self.set_camera_orientation(should_apply_shading=False, phi=55*DEGREES, theta=210*DEGREES, zoom=1)
         cube1 = RubiksCube(dim=3, colors=self.gray_colors)
 
         # case 1
@@ -204,10 +204,10 @@ class Main(ThreeDScene):
 
     def step3(self):
         t = Text("C F O P 算法: III", font_size=22, color=BLACK)
-        t.to_corner(UL, buff=0).shift(RIGHT*0.5+DOWN*0.2)
+        t.to_corner(UL, buff=0).shift(RIGHT*0.5+DOWN*0.4)
         self.add_fixed_in_frame_mobjects(t)
 
-        self.set_camera_orientation(phi=55*DEGREES, theta=210*DEGREES, zoom=1)
+        self.set_camera_orientation(should_apply_shading=False, phi=55*DEGREES, theta=210*DEGREES, zoom=1)
         cube1 = RubiksCube(dim=3, colors=self.gray_colors).scale(0.5)
 
         # case 1
@@ -263,7 +263,7 @@ class Main(ThreeDScene):
         self.wait(0.5)
 
         # case 2
-        self.set_camera_orientation(phi=55*DEGREES, theta=210*DEGREES)
+        self.set_camera_orientation(should_apply_shading=False, phi=55*DEGREES, theta=210*DEGREES)
         self.move_camera(phi=55*DEGREES, theta=160*DEGREES, rate_func=rate_functions.smooth)
         self.wait(0.5)
 
@@ -290,9 +290,9 @@ class Main(ThreeDScene):
 
     def step4(self):
         t = Text("C F O P 算法: IV", font_size=22, color=BLACK)
-        t.to_corner(UL, buff=0).shift(RIGHT*0.5+DOWN*0.2)
+        t.to_corner(UL, buff=0).shift(RIGHT*0.5+DOWN*0.4)
         self.add_fixed_in_frame_mobjects(t)
-        self.set_camera_orientation(phi=55*DEGREES, theta=210*DEGREES, zoom=1)
+        self.set_camera_orientation(should_apply_shading=False, phi=55*DEGREES, theta=210*DEGREES, zoom=1)
 
         cube1 = RubiksCube(dim=3, colors=self.gray_colors)
         cube1.setcolor(("U", 1, 1, 2), COLORS["D"])
@@ -369,10 +369,10 @@ class Main(ThreeDScene):
 
     def step5(self):
         t = Text("C F O P 算法: V", font_size=22, color=BLACK)
-        t.to_corner(UL, buff=0).shift(RIGHT*0.5+DOWN*0.2)
+        t.to_corner(UL, buff=0).shift(RIGHT*0.5+DOWN*0.4)
         self.add_fixed_in_frame_mobjects(t)
 
-        self.set_camera_orientation(phi=55*DEGREES, theta=160*DEGREES, zoom=1)
+        self.set_camera_orientation(should_apply_shading=False, phi=55*DEGREES, theta=160*DEGREES, zoom=1)
         colors = {"U": COLORS["D"], "D": COLORS["U"], "L": COLORS["L"],
                   "R": COLORS["R"], "F": COLORS["B"], "B": COLORS["F"]}
         cube1 = RubiksCube(dim=3, colors=colors)
@@ -408,10 +408,10 @@ class Main(ThreeDScene):
 
     def step6(self):
         t = Text("C F O P 算法: VI", font_size=22, color=BLACK)
-        t.to_corner(UL, buff=0).shift(RIGHT*0.5+DOWN*0.2)
+        t.to_corner(UL, buff=0).shift(RIGHT*0.5+DOWN*0.4)
         self.add_fixed_in_frame_mobjects(t)
 
-        self.set_camera_orientation(phi=55*DEGREES, theta=210*DEGREES, zoom=1)
+        self.set_camera_orientation(should_apply_shading=False, phi=55*DEGREES, theta=210*DEGREES, zoom=1)
         colors = {"U": COLORS["D"], "D": COLORS["U"], "L": COLORS["L"],
                   "R": COLORS["R"], "F": COLORS["B"], "B": COLORS["F"]}
         cube1 = RubiksCube(dim=3, colors=colors)
@@ -451,10 +451,10 @@ class Main(ThreeDScene):
 
     def step7(self):
         t = Text("C F O P 算法: VII", font_size=22, color=BLACK)
-        t.to_corner(UL, buff=0).shift(RIGHT*0.5+DOWN*0.2)
+        t.to_corner(UL, buff=0).shift(RIGHT*0.5+DOWN*0.4)
         self.add_fixed_in_frame_mobjects(t)
 
-        self.set_camera_orientation(phi=55*DEGREES, theta=210*DEGREES, zoom=1)
+        self.set_camera_orientation(should_apply_shading=False, phi=55*DEGREES, theta=210*DEGREES, zoom=1)
         colors = {"U": COLORS["D"], "D": COLORS["U"], "L": COLORS["L"],
                   "R": COLORS["R"], "F": COLORS["B"], "B": COLORS["F"]}
         cube1 = RubiksCube(dim=3, colors=colors)
@@ -501,10 +501,10 @@ class Main(ThreeDScene):
 
     def cfop(self):
         t = Text("C F O P 算法", font_size=22, color=BLACK)
-        t.to_corner(UL, buff=0).shift(RIGHT*0.5+DOWN*0.2)
+        t.to_corner(UL, buff=0).shift(RIGHT*0.5+DOWN*0.4)
         self.add_fixed_in_frame_mobjects(t)
 
-        self.set_camera_orientation(phi=55*DEGREES, theta=210*DEGREES, zoom=1)
+        self.set_camera_orientation(should_apply_shading=False, phi=55*DEGREES, theta=210*DEGREES, zoom=1)
         cube = RubiksCube(dim=3)
         with open("in.txt", "r") as f:
             turns = list(map(lambda s: s.strip(), f.readlines()))
@@ -525,7 +525,7 @@ class Main(ThreeDScene):
             i += 1
             self.play(cube.turn(turn), run_time=0.5)
             if i == 38:
-                self.move_camera(phi=-120*DEGREES, theta=240*DEGREES)
+                self.move_camera(phi=-120*DEGREES, theta=210*DEGREES)
             if i == 46:
                 self.move_camera(phi=-120*DEGREES, theta=60*DEGREES)
             if i == 54:
@@ -558,20 +558,6 @@ class Main(ThreeDScene):
                 self.play(cube.turn(turn), run_time=0.5)
         self.play(cube.turn("D'"), run_time=0.5)
 
+
         self.move_camera(phi=-120*DEGREES, theta=(-30+180)*DEGREES, run_time=4)
 
-class Test(ThreeDScene):
-    def construct(self):
-        self.set_camera_orientation(phi=55*DEGREES, theta=160*DEGREES)
-        axes = ThreeDAxes()
-        self.add(axes)
-        cube = RubiksCube(dim=3, colors=COLORS)
-        self.add(cube)
-        anims = []
-        anims.append(cube.turn("R"))
-        for x in range(3):
-            for y in range(1, 3):
-                for z in range(3):
-                    anims.append(Animation(cube.cubies[x, y, z]))
-
-        self.play(*anims)
