@@ -9,7 +9,7 @@ COLORS = {"U": WHITE, "R": "#B90000", "F": "#1DDF13",
 class Face(RoundedRectangle):
     def __init__(self, side_length, corner_radius, which):
         super().__init__(height=side_length, width=side_length, stroke_color=BLACK, stroke_width=4,
-                shade_in_3d=True, corner_radius=corner_radius, fill_color=GRAY, fill_opacity=1)
+                shade_in_3d=True, corner_radius=corner_radius, fill_color=BLACK, fill_opacity=1)
         self.which = which
 
 class Cube(VGroup):
@@ -23,7 +23,7 @@ class Cube(VGroup):
                            "D": (sli, sli, 1), "L": (sli, 1, sli), "R": (sli, 1, sli) }
         self.faces = np.ndarray((3, 3, 3), dtype=object)
 
-        super().__init__(fill_color=GRAY, fill_opacity=1, stroke_color=BLACK, stroke_width=4)
+        super().__init__(fill_color=BLACK, fill_opacity=1, stroke_color=BLACK, stroke_width=4)
 
     def generate_points(self):
         for which, vect in ("F", LEFT), ("B", RIGHT), ("R", DOWN), ("L", UP), ("U", OUT), ("D", IN):
@@ -100,8 +100,6 @@ class RubiksCube(VGroup):
         axis = self.turn_axis[which[0]]
 
         face = self.get_face(which[0])
-        #VGroup(*self.cubies.flatten()).set_z_index(0)
-        #face.set_z_index(-1)
 
         # turn face of each cube
         for cube in face:

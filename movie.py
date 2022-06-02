@@ -8,7 +8,6 @@ COLORS = {"U": WHITE, "R": "#B90000", "F": "#1DDF13",
 class Main(ThreeDScene):
     def construct(self):
         self.gray_colors = { face : GRAY for face in ["F", "B", "U", "D", "L", "R"] }
-        self.step6()
         self.begin()
         self.kociemba()
         self.step1()
