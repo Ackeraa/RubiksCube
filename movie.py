@@ -8,6 +8,7 @@ COLORS = {"U": WHITE, "R": "#B90000", "F": "#1DDF13",
 class Main(ThreeDScene):
     def construct(self):
         self.gray_colors = { face : GRAY for face in ["F", "B", "U", "D", "L", "R"] }
+        self.step6()
         self.begin()
         self.kociemba()
         self.step1()
@@ -29,6 +30,7 @@ class Main(ThreeDScene):
         self.wait(0.6)
 
     def kociemba(self):
+        self.begin_ambient_camera_rotation(rate=0)
         self.cube = self.cube0.copy()
         self.cube.disarray(moves=200)
         self.play(ReplacementTransform(self.cube0, self.cube))
@@ -354,7 +356,6 @@ class Main(ThreeDScene):
         css.set_z_index(-1)
         self.wait(0.5)
 
-        self.move_camera(phi=55*DEGREES, theta=210*DEGREES)
         turns = ["B", "L", "U", "L'", "U'", "B'"]
         for i in range(len(turns)):
             self.play(Indicate(ts[i], color=TEAL), cube1.turn(turns[i]), run_time=0.6)
@@ -425,22 +426,21 @@ class Main(ThreeDScene):
             cube1.turn(turn, show=False)
         self.play(FadeIn(cube1), t.animate.set(color=WHITE))
 
-        d1 = Dot(color=RED).move_to(cube1.cubies[0, 2, 2].get_face("U"))
-        d2 = Dot(color=BLACK).move_to(cube1.cubies[2, 2, 2].get_face("U"))
-        d3 = Dot(color=GREEN).move_to(cube1.cubies[2, 0, 2].get_face("U"))
-        p1 = d1.get_center()
-        p2 = d2.get_center()
-        p3 = d3.get_center()
-        self.play(FadeIn(d1, d2, d3))
-        self.wait(0.5)
-        self.play(d1.animate.move_to(p2), d2.animate.move_to(p3), d3.animate.move_to(p1))
-        self.play(FadeOut(d1, d2, d3))
-
         turns = ["U", "R", "U'", "L'", "U", "R'", "U'", "L"]
         ts = VGroup(*[Text(turn, font_size=20, color=RED_E) for turn in turns]).arrange(RIGHT, buff=0.1)
         self.add_fixed_in_frame_mobjects(ts)
         ts.shift(UP*3.5)
         for i in range(2):
+            d1 = Dot(color=RED).move_to(cube1.cubies[0, 2, 2].get_face("U"))
+            d2 = Dot(color=BLACK).move_to(cube1.cubies[2, 2, 2].get_face("U"))
+            d3 = Dot(color=GREEN).move_to(cube1.cubies[2, 0, 2].get_face("U"))
+            p1 = d1.get_center()
+            p2 = d2.get_center()
+            p3 = d3.get_center()
+            self.play(FadeIn(d1, d2, d3))
+            self.wait(0.5)
+            self.play(d1.animate.move_to(p2), d2.animate.move_to(p3), d3.animate.move_to(p1))
+            self.play(FadeOut(d1, d2, d3))
             for j in range(len(turns)):
                 self.play(Indicate(ts[j], color=TEAL), cube1.turn(turns[j]), run_time=0.6)
             self.move_camera(phi=55*DEGREES, theta=(210+360*(i+1))*DEGREES, run_time=4, rate_func=rate_functions.smooth)
