@@ -5,6 +5,8 @@ from kociemba import solver as sv
 
 COLORS = {"U": WHITE, "R": "#B90000", "F": "#1DDF13",
           "D": "#FFD500", "L": "#F0720A", "B": "#0045AD"}
+COLORS = {"U": WHITE, "R": "#DC0005", "F": "#0D6301",
+          "D": "#DFE309", "L": "#DD8207", "B": "#0000DE"}
 
 class Face(RoundedRectangle):
     def __init__(self, side_length, corner_radius, which):

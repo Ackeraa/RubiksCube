@@ -2,8 +2,9 @@ from manim import *
 from rubiks_cube import RubiksCube
 import random
 
-COLORS = {"U": WHITE, "R": "#B90000", "F": "#1DDF13",
-          "D": "#FFD500", "L": "#F0720A", "B": "#0045AD"}
+
+COLORS = {"U": WHITE, "R": "#DC0005", "F": "#0D6301",
+          "D": "#DFE309", "L": "#DD8207", "B": "#0000DE"}
 
 class Main(ThreeDScene):
     def construct(self):
@@ -26,7 +27,6 @@ class Main(ThreeDScene):
         self.begin_ambient_camera_rotation(rate=-2)
         self.play(SpiralIn(VGroup(*self.cube0.cubies[:, :, :].flatten())), run_time=2.5)
         self.stop_ambient_camera_rotation()
-        self.wait(0.6)
 
     def kociemba(self):
         self.begin_ambient_camera_rotation(rate=0)
@@ -35,13 +35,14 @@ class Main(ThreeDScene):
         self.play(ReplacementTransform(self.cube0, self.cube))
 
         t = Text("kociemba 算法", font_size=22, color=BLACK)
-        t.to_corner(UL, buff=0).shift(RIGHT*0.5+DOWN*0.4)
+        t.to_corner(UL, buff=0).shift(RIGHT*0.5+DOWN*0.3)
         self.add_fixed_in_frame_mobjects(t)
         self.play(t.animate.set(color=WHITE))
         self.wait(0.5)
 
         for rotate in self.cube.solve():
             self.play(rotate, run_time=0.4)
+        self.wait(0.5)
 
         anims = [FadeOut(self.cube), FadeOut(t)]
         self.move_camera(phi=55*DEGREES, theta=(240+180)*DEGREES, zoom=0.2, added_anims=anims, run_time=2)
@@ -49,7 +50,7 @@ class Main(ThreeDScene):
 
     def step1(self):
         t = Text("C F O P 算法: I", font_size=22, color=BLACK)
-        t.to_corner(UL, buff=0).shift(RIGHT*0.5+DOWN*0.4)
+        t.to_corner(UL, buff=0).shift(RIGHT*0.5+DOWN*0.3)
         self.add_fixed_in_frame_mobjects(t)
 
         self.set_camera_orientation(should_apply_shading=False, phi=55*DEGREES, theta=210*DEGREES, zoom=1)
@@ -117,7 +118,7 @@ class Main(ThreeDScene):
 
     def step2(self):
         t = Text("C F O P 算法: II", font_size=22, color=BLACK)
-        t.to_corner(UL, buff=0).shift(RIGHT*0.5+DOWN*0.4)
+        t.to_corner(UL, buff=0).shift(RIGHT*0.5+DOWN*0.3)
         self.add_fixed_in_frame_mobjects(t)
 
         self.set_camera_orientation(should_apply_shading=False, phi=55*DEGREES, theta=210*DEGREES, zoom=1)
@@ -205,7 +206,7 @@ class Main(ThreeDScene):
 
     def step3(self):
         t = Text("C F O P 算法: III", font_size=22, color=BLACK)
-        t.to_corner(UL, buff=0).shift(RIGHT*0.5+DOWN*0.4)
+        t.to_corner(UL, buff=0).shift(RIGHT*0.5+DOWN*0.3)
         self.add_fixed_in_frame_mobjects(t)
 
         self.set_camera_orientation(should_apply_shading=False, phi=55*DEGREES, theta=210*DEGREES, zoom=1)
@@ -291,7 +292,7 @@ class Main(ThreeDScene):
 
     def step4(self):
         t = Text("C F O P 算法: IV", font_size=22, color=BLACK)
-        t.to_corner(UL, buff=0).shift(RIGHT*0.5+DOWN*0.4)
+        t.to_corner(UL, buff=0).shift(RIGHT*0.5+DOWN*0.3)
         self.add_fixed_in_frame_mobjects(t)
         self.set_camera_orientation(should_apply_shading=False, phi=55*DEGREES, theta=210*DEGREES, zoom=1)
 
@@ -369,7 +370,7 @@ class Main(ThreeDScene):
 
     def step5(self):
         t = Text("C F O P 算法: V", font_size=22, color=BLACK)
-        t.to_corner(UL, buff=0).shift(RIGHT*0.5+DOWN*0.4)
+        t.to_corner(UL, buff=0).shift(RIGHT*0.5+DOWN*0.3)
         self.add_fixed_in_frame_mobjects(t)
 
         self.set_camera_orientation(should_apply_shading=False, phi=55*DEGREES, theta=160*DEGREES, zoom=1)
@@ -408,7 +409,7 @@ class Main(ThreeDScene):
 
     def step6(self):
         t = Text("C F O P 算法: VI", font_size=22, color=BLACK)
-        t.to_corner(UL, buff=0).shift(RIGHT*0.5+DOWN*0.4)
+        t.to_corner(UL, buff=0).shift(RIGHT*0.5+DOWN*0.3)
         self.add_fixed_in_frame_mobjects(t)
 
         self.set_camera_orientation(should_apply_shading=False, phi=55*DEGREES, theta=210*DEGREES, zoom=1)
@@ -450,7 +451,7 @@ class Main(ThreeDScene):
 
     def step7(self):
         t = Text("C F O P 算法: VII", font_size=22, color=BLACK)
-        t.to_corner(UL, buff=0).shift(RIGHT*0.5+DOWN*0.4)
+        t.to_corner(UL, buff=0).shift(RIGHT*0.5+DOWN*0.3)
         self.add_fixed_in_frame_mobjects(t)
 
         self.set_camera_orientation(should_apply_shading=False, phi=55*DEGREES, theta=210*DEGREES, zoom=1)
@@ -500,7 +501,7 @@ class Main(ThreeDScene):
 
     def cfop(self):
         t = Text("C F O P 算法", font_size=22, color=BLACK)
-        t.to_corner(UL, buff=0).shift(RIGHT*0.5+DOWN*0.4)
+        t.to_corner(UL, buff=0).shift(RIGHT*0.5+DOWN*0.3)
         self.add_fixed_in_frame_mobjects(t)
 
         self.set_camera_orientation(should_apply_shading=False, phi=55*DEGREES, theta=210*DEGREES, zoom=1)
